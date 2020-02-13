@@ -6,7 +6,7 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from chalice import Chalice, Response
 
-from chalice_plugin import generate_plugin
+from .chalice_plugin import generate_plugin
 
 
 def is_endpoint(v: Callable) -> bool:
