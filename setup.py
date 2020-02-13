@@ -9,8 +9,9 @@ setup(
     author_email='beiller@gmail.com',
     license='unlicense',
     packages=['chalice_autodoc'],
-    zip_safe=False,
+    zip_safe=True,
     install_requires=[
+        " importlib_resources ; python_version<'3.7'",
         'apispec==3.2.0',
         'apispec_webframeworks==0.5.2',
         'PyYAML==5.1.2',

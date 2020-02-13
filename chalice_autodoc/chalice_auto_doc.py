@@ -8,6 +8,16 @@ from chalice import Chalice, Response
 
 from .chalice_plugin import generate_plugin
 
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
+from . import templates  # relative-import the *package* containing the templates
+
+template = pkg_resources.read_text(templates, 'openapi_ui_template.html')
+
 
 def is_endpoint(v: Callable) -> bool:
     return v.__doc__ is not None and '---' in v.__doc__ and 'responses' in v.__doc__
@@ -52,6 +62,5 @@ def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="
     if is_json:
         return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
-        with open('openapi_ui_template.html') as oapi:
-            html = oapi.read().replace('<<openapi_spec_url>>', json_url)
+        html = template.replace('<<openapi_spec_url>>', json_url)
         return Response(body=html, headers={**headers, "Content-Type": "text/html"}, status_code=200)
