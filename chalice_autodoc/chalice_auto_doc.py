@@ -17,13 +17,13 @@ def get_route_functions(glob: dict) -> dict:
     return {k: v for k, v in glob.items() if is_endpoint(v)}
 
 
-def get_json(app: Chalice, route_functions: dict):
+def get_json(app: Chalice, route_functions: dict, route_prefix: str, version="1.0.0"):
     spec = APISpec(
-        title='Borrower Portal',
-        version="1.0.0",
+        title=app.app_name,
+        version=version,
         openapi_version="3.0.2",
         plugins=[generate_plugin(app)(), MarshmallowPlugin()],
-        servers=[{"url": f"/", "description": f"Host on /"}],
+        servers=[{"url": f"/{route_prefix}", "description": f"Host on /"}],
     )
 
     fn_list = {[fn_name.view_name for fn_name in r.values()][0] for path, r in app.routes.items()}
@@ -38,7 +38,7 @@ def get_json(app: Chalice, route_functions: dict):
 DEFAULT_HEADERS = {'Content-type': 'application/json'}
 
 
-def info_route(app: Chalice, route_functions: dict, headers=None) -> Response:
+def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="") -> Response:
     """
     Get service info
 
@@ -50,7 +50,7 @@ def info_route(app: Chalice, route_functions: dict, headers=None) -> Response:
     req = app.current_request
     is_json = req.query_params is not None and req.query_params.get("openapi_spec", "") == "json"
     if is_json:
-        return Response(body=get_json(app, route_functions), headers=headers, status_code=200)
+        return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
         with open('openapi_ui_template.html') as oapi:
             html = oapi.read().replace('<<openapi_spec_url>>', json_url)
