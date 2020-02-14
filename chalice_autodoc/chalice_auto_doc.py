@@ -60,4 +60,4 @@ def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="
         return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
         html = html_str.replace('<<openapi_spec_url>>', json_url)
-        return Response(body=html, headers={**headers, "Content-Type": "text/html"}, status_code=200)
+        return Response(body=html, headers={"Content-Type": "text/html"}, status_code=200)
