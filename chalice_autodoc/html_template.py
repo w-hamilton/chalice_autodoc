@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html_data = """<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
@@ -139,3 +139,4 @@ var i,o="";e.exports=r},function(e,t,n){"use strict";e.exports=function(e,t){if(
 </script>
 </body>
 </html>
+"""

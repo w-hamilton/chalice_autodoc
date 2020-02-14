@@ -7,16 +7,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from chalice import Chalice, Response
 
 from .chalice_plugin import generate_plugin
-
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
-    import importlib_resources as pkg_resources
-
-from . import templates  # relative-import the *package* containing the templates
-
-template = pkg_resources.read_text(templates, 'openapi_ui_template.html')
+from .html_template import html_data
 
 
 def is_endpoint(v: Callable) -> bool:
@@ -62,5 +53,5 @@ def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="
     if is_json:
         return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
-        html = template.replace('<<openapi_spec_url>>', json_url)
+        html = html_data.replace('<<openapi_spec_url>>', json_url)
         return Response(body=html, headers={**headers, "Content-Type": "text/html"}, status_code=200)
