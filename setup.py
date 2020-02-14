@@ -9,7 +9,7 @@ setup(
     author_email='beiller@gmail.com',
     license='unlicense',
     packages=['chalice_autodoc'],
-    zip_safe=True,
+    zip_safe=False,
     install_requires=[
         'apispec==3.2.0',
         'apispec_webframeworks==0.5.2',
