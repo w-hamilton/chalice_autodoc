@@ -1,5 +1,8 @@
+import base64
+import io
 import json
 import logging
+import zipfile
 from typing import Callable
 
 from apispec import APISpec
@@ -50,8 +53,11 @@ def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="
     json_url = "?openapi_spec=json"
     req = app.current_request
     is_json = req.query_params is not None and req.query_params.get("openapi_spec", "") == "json"
+    d1 = base64.b64decode(html_data)
+    z = zipfile.ZipFile(io.BytesIO(d1))
+    html_str = z.read('openapi_ui_template.html').decode('utf8')
     if is_json:
         return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
-        html = html_data.encode('utf-8', errors='surrogatepass').decode(errors='ignore').replace('<<openapi_spec_url>>', json_url)
+        html = html_str.replace('<<openapi_spec_url>>', json_url)
         return Response(body=html, headers={**headers, "Content-Type": "text/html"}, status_code=200)
