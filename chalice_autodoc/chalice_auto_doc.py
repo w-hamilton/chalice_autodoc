@@ -53,5 +53,5 @@ def info_route(app: Chalice, route_functions: dict, headers=None, route_prefix="
     if is_json:
         return Response(body=get_json(app, route_functions, route_prefix), headers=headers, status_code=200)
     else:
-        html = html_data.encode('utf-8', errors='surrogatepass').replace('<<openapi_spec_url>>', json_url)
+        html = html_data.encode('utf-8', errors='surrogatepass').encode().replace('<<openapi_spec_url>>', json_url)
         return Response(body=html, headers={**headers, "Content-Type": "text/html"}, status_code=200)
