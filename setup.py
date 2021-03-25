@@ -13,7 +13,7 @@ setup(
     install_requires=[
         'apispec==3.2.0',
         'apispec_webframeworks==0.5.2',
-        'PyYAML==5.1.2',
+        'PyYAML==5.4',
         'chalice==1.11.0'
     ]
 )
